@@ -57,9 +57,9 @@ class SketchLab01 : PApplet() {
         val generatedRadius = RandomGenerator.generateFloat(BALL_RADIUS_MIN, BALL_RADIUS_MAX)
         return BallModel(
                 pApplet = this,
-                radius = generatedRadius,
                 positionX = RandomGenerator.generateFloat(BALL_POSITION_X_MIN + generatedRadius, BALL_POSITION_X_MAX - generatedRadius),
                 positionY = RandomGenerator.generateFloat(BALL_POSITION_Y_MIN + generatedRadius, BALL_POSITION_Y_MAX - generatedRadius),
+                radius = generatedRadius,
                 color = RandomGenerator.generateColor(),
                 speedX = RandomGenerator.generateFloat(BALL_SPEED_X_MIN, BALL_SPEED_X_MAX),
                 speedY = RandomGenerator.generateFloat(BALL_SPEED_Y_MIN, BALL_SPEED_Y_MAX))

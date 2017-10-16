@@ -1,9 +1,9 @@
 package com.patres.processing.lab01
 
-import com.patres.processing.lab01.MainApp.Companion.OPTIONS
+import com.patres.processing.lab01.Lab01.Companion.OPTIONS
 import processing.core.PApplet
 
-class MainApp {
+class Lab01 {
     companion object {
         val OPTIONS = arrayOf("--present", SketchLab01::class.java.canonicalName)
     }
