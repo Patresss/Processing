@@ -28,7 +28,7 @@ class BallModel(
         val HALO_SIZE = 10f
     }
 
-    var currentRadiusStep: Float = radius * 0.1F
+    var currentRadiusStep: Float = radius * 0.01F
     var shouldVibrate: Boolean = false
     var neighbour: BallModel? = null
     var currentRadius: Float = radius
@@ -94,7 +94,7 @@ class BallModel(
 
     private fun vibrate() {
         if (currentRadius > radius * MAX_RADIUS_VIBRATE || currentRadius < radius * MIN_RADIUS_VIBRATE) {
-            currentRadiusStep = -currentRadiusStep
+            currentRadiusStep = - currentRadiusStep
         }
         currentRadius += currentRadiusStep
     }

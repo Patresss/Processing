@@ -5,7 +5,8 @@ import processing.core.PApplet
 
 class Lab02 {
     companion object {
-        val OPTIONS = arrayOf("--present", SketchLab02::class.java.canonicalName)
+        val OPTIONS = arrayOf(SketchLab02::class.java.canonicalName)
+        //val OPTIONS = arrayOf("--present", SketchLab02::class.java.canonicalName)
     }
 }
 

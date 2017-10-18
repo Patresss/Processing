@@ -45,23 +45,18 @@ class SketchLab02 : PApplet() {
     override fun draw() {
         background(180f, 180f, 180f)
 
-        var ballsToCollide = ArrayList<BallModel>()
-        balls.forEach {
-            ballsToCollide.add(it)
-        }
-
+        val ballsToCollide = ArrayList<BallModel>(balls)
         balls.forEach {
             ballsToCollide.remove(it)
             it.collide(ballsToCollide)
         }
-
-        balls.forEach {
-            it.draw()
-        }
-
+        balls.forEach { it.draw() }
+        clickedBalls.forEach { getNearestNeighbors(it).forEach { ball -> ball.neighbour = it } }
         balls.forEach {
             it.drawNeighbourEffect()
+            it.neighbour = null
         }
+
     }
 
 
@@ -79,15 +74,15 @@ class SketchLab02 : PApplet() {
     }
 
     override fun mousePressed() {
-        clickedBalls = balls.filter { overBall(it)}.toList()
         when (mouseButton) {
             CENTER -> reduceNumberOfLife()
-            RIGHT -> clickedBalls.forEach { it.radius += BALL_RADIUS_CHANGE_STEP }
+            RIGHT -> balls.filter { overBall(it) }.forEach { it.radius += BALL_RADIUS_CHANGE_STEP }
             LEFT -> leftMousePressed()
         }
     }
 
     private fun leftMousePressed() {
+        clickedBalls = balls.filter { overBall(it) }.toList()
         balls.forEach {
             it.shouldVibrate = false
             it.neighbour = null
@@ -110,7 +105,7 @@ class SketchLab02 : PApplet() {
     }
 
     fun reduceNumberOfLife() {
-        clickedBalls.forEach { it.numberOfLife-- }
+        balls.filter { overBall(it) }.forEach { it.numberOfLife-- }
         balls.filter { it.numberOfLife <= 0 }.forEach { balls.remove(it) }
     }
 
