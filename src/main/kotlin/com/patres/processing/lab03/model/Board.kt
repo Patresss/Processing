@@ -17,8 +17,8 @@ class Board(
 
     fun draw() {
         pongGame.pApplet.image(background, 0f, 0f, sizeX.toFloat(), sizeY.toFloat())
-        pongGame.pApplet.image(borderImage,0f, 0f, sizeX.toFloat(), borderWidth) // up
-        pongGame.pApplet.image(borderImage, 0f, sizeY - borderWidth, sizeX.toFloat(), sizeY.toFloat()) // down
+//        pongGame.pApplet.image(borderImage,0f, 0f, sizeX.toFloat(), borderWidth) // up
+//        pongGame.pApplet.image(borderImage, 0f, sizeY - borderWidth, sizeX.toFloat(), sizeY.toFloat()) // down
         pongGame.pApplet.image(borderImage, 0f, 0f, borderWidth, sizeY.toFloat()) // left
         pongGame.pApplet.image(borderImage, sizeX - borderWidth, 0f, sizeX.toFloat(), sizeY.toFloat()) // right
     }
