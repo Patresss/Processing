@@ -1,23 +1,20 @@
 package com.patres.processing.lab03.model
 
-import com.patres.processing.fill
 import com.patres.processing.getPositiveOrNegativeValue
 import com.patres.processing.lab03.PongGame
 import processing.core.PVector
-import java.awt.Color
 
 
-class PingBallModel(
+class PingBall(
         val pongGame: PongGame,
         private var radius: Float = 10.0f,
-        private var color: Color = Color.WHITE,
         private var speed: Float = 10.0f,
         private var velocity: PVector = PVector.random2D(),
         private var increaseSpeedStep: Float = 0.01f,
         var position: PVector = PVector()
 ) {
 
-    val ballImage = pongGame.pApplet.loadImage("img/sun-texture.jpg")
+    private val ballImage = pongGame.pApplet.loadImage("img/sun-texture.jpg")!!
 
     init {
         newBallProperties()
@@ -32,8 +29,6 @@ class PingBallModel(
     }
 
     fun draw() {
-        pongGame.pApplet.fill(color)
-        pongGame.pApplet.noStroke()
         if (!pongGame.pause) move()
         drawBall()
         if (!pongGame.pause) {
@@ -44,23 +39,23 @@ class PingBallModel(
     }
 
     private fun drawBall() {
-        var mask = pongGame.pApplet.createGraphics(ballImage.width, ballImage.height)
+        val mask = pongGame.pApplet.createGraphics(ballImage.width, ballImage.height)
         mask.beginDraw()
         mask.ellipse(position.x, position.y, radius * 2, radius * 2)
         mask.endDraw()
         ballImage.mask(mask)
-        pongGame.pApplet.image(ballImage, 0f, 0f);
+        pongGame.pApplet.image(ballImage, 0f, 0f)
     }
 
-    private fun detectPaddle(paddle: PaddleModel) {
+    private fun detectPaddle(paddle: Paddle) {
         val normalizeVector = paddle.getNormalizedVector()
 
         val incidence = PVector.mult(velocity, -1f)
         incidence.normalize()
-        paddle.subpoints.forEach {
-            if (PVector.dist(position, it) < radius) {
+        paddle.subPoints.forEach{
+            if(PVector.dist(position, it) < radius) {
                 val dot = incidence.dot(normalizeVector)
-                velocity.set(2 * normalizeVector.x * dot - incidence.x, 2 * normalizeVector.y * dot - incidence.y)
+                velocity.set( 2* normalizeVector.x * dot - incidence.x, 2 * normalizeVector.y * dot - incidence.y)
                 velocity.mult(speed)
             }
         }

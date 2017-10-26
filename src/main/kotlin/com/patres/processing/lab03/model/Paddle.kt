@@ -1,22 +1,23 @@
 package com.patres.processing.lab03.model
 
+import com.patres.processing.lab03.Player
 import com.patres.processing.lab03.PongGame
 import processing.core.PVector
 
-class PaddleModel(
+class Paddle(
         val player: Player,
         val pongGame: PongGame,
         var width: Float = 200f,
-        var height: Float = 10f,
-        var margin: Float = 50f,
-        var subpoints: ArrayList<PVector> = ArrayList()
+        private var height: Float = 10f,
+        private var margin: Float = 50f,
+        var subPoints: ArrayList<PVector> = ArrayList()
 ) {
 
     private var vectorLeft = PVector()
     private var vectorRight = PVector()
-    val paddleImage = pongGame.pApplet.loadImage("img/ufo.jpg")
+    private val paddleImage = pongGame.pApplet.loadImage("img/ufo.jpg")!!
 
-    var position: Float = pongGame.board.sizeX.toFloat() / 2 - width / 2
+    private var position: Float = pongGame.board.sizeX.toFloat() / 2 - width / 2
         set(value) {
             val minPositionX = pongGame.board.borderWidth
             val maxPositionX = pongGame.board.sizeX.toFloat() - pongGame.board.borderWidth - width
@@ -55,6 +56,7 @@ class PaddleModel(
     private fun updateVectors() {
         val leftPositionX = position
         val rightPositionX = width + position
+
         if (player.up) {
             val positionY = margin
             vectorLeft = PVector(leftPositionX, positionY)
@@ -68,14 +70,14 @@ class PaddleModel(
     }
 
     private fun fillCoordinatePoints() {
-        subpoints = ArrayList()
+        subPoints = ArrayList()
         val baseLength = PVector.dist(vectorLeft, vectorRight)
         for (i in 0 until width.toInt()) {
             val vector = PVector()
             vector.x = vectorLeft.x + (vectorRight.x - vectorLeft.x) / baseLength * i
             vector.y = vectorLeft.y + (vectorRight.y - vectorLeft.y) / baseLength * i
             if (player.up) vector.y += height
-            subpoints.add(vector)
+            subPoints.add(vector)
         }
     }
 

@@ -1,8 +1,7 @@
-package com.patres.processing.lab03.model
+package com.patres.processing.lab03
 
-import com.patres.processing.lab03.PongGame
-import com.patres.processing.lab03.Position
-import processing.core.PFont
+import com.patres.processing.lab03.model.Paddle
+import com.patres.processing.utils.Position
 
 class Player(
         var pongGame: PongGame,
@@ -13,7 +12,7 @@ class Player(
         var computer: Boolean = false
 ) {
 
-    var paddleModel: PaddleModel = PaddleModel(player = this, pongGame = pongGame)
+    var paddleModel: Paddle = Paddle(player = this, pongGame = pongGame)
 
 
     fun draw() {
@@ -32,7 +31,14 @@ class Player(
         paddleModel.movePosition(value + pongGame.board.borderWidth - paddleModel.width / 2)
     }
 
-    fun computerMove() {
+    fun lostLife() {
+        pongGame.pause = true
+        numberOfLife--
+        pongGame.balls.forEach { it.newBallProperties() }
+    }
+
+
+    private fun computerMove() {
         val sortedBalls = pongGame.balls.sortedBy { it.position.y }
         val nearestBall = if (up) {
             sortedBalls.first()
@@ -40,12 +46,5 @@ class Player(
             sortedBalls.last()
         }
         paddleModel.movePosition(nearestBall.position.x + pongGame.board.borderWidth - paddleModel.width / 2)
-    }
-
-
-    fun lostLife() {
-        pongGame.pause = true
-        numberOfLife--
-        pongGame.balls.forEach { it.newBallProperties() }
     }
 }
