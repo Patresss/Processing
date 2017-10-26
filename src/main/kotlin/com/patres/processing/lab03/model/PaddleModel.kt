@@ -1,26 +1,25 @@
 package com.patres.processing.lab03.model
 
-import com.patres.processing.fill
+import com.patres.processing.lab03.PongGame
 import processing.core.PVector
-import java.awt.Color
 
 class PaddleModel(
         val player: Player,
-        var color: Color = Color.WHITE,
+        val pongGame: PongGame,
         var width: Float = 200f,
         var height: Float = 10f,
         var margin: Float = 50f,
-        var radii: Float = 5f,
         var subpoints: ArrayList<PVector> = ArrayList()
 ) {
 
     private var vectorLeft = PVector()
     private var vectorRight = PVector()
+    val paddleImage = pongGame.pApplet.loadImage("img/ufo.jpg")
 
-    var position: Float  = player.pongGame.board.sizeX.toFloat()/2 - width/2
+    var position: Float = pongGame.board.sizeX.toFloat() / 2 - width / 2
         set(value) {
-            val minPositionX = player.pongGame.board.borderWidth
-            val maxPositionX = player.pongGame.board.sizeX.toFloat() - player.pongGame.board.borderWidth - width
+            val minPositionX = pongGame.board.borderWidth
+            val maxPositionX = pongGame.board.sizeX.toFloat() - pongGame.board.borderWidth - width
             field = when {
                 value < minPositionX -> minPositionX
                 value > maxPositionX -> maxPositionX
@@ -39,9 +38,13 @@ class PaddleModel(
     }
 
     fun draw() {
-        player.pongGame.pApplet.fill(color)
-        player.pongGame.pApplet.rect(vectorLeft.x, vectorLeft.y, width, height, radii)
+        pongGame.pApplet.image(paddleImage, vectorLeft.x, vectorLeft.y, width, height)
         fillCoordinatePoints()
+    }
+
+    fun movePosition(value: Float) {
+        position = value
+        updateVectors()
     }
 
     fun move(value: Float) {
@@ -57,13 +60,12 @@ class PaddleModel(
             vectorLeft = PVector(leftPositionX, positionY)
             vectorRight = PVector(rightPositionX, positionY)
         } else {
-            val positionY = player.pongGame.board.sizeY - margin - height
+            val positionY = pongGame.board.sizeY - margin - height
             vectorLeft = PVector(leftPositionX, positionY)
             vectorRight = PVector(rightPositionX, positionY)
         }
 
     }
-
 
     private fun fillCoordinatePoints() {
         subpoints = ArrayList()
@@ -72,6 +74,7 @@ class PaddleModel(
             val vector = PVector()
             vector.x = vectorLeft.x + (vectorRight.x - vectorLeft.x) / baseLength * i
             vector.y = vectorLeft.y + (vectorRight.y - vectorLeft.y) / baseLength * i
+            if (player.up) vector.y += height
             subpoints.add(vector)
         }
     }

@@ -17,6 +17,8 @@ class PingBallModel(
         var position: PVector = PVector()
 ) {
 
+    val ballImage = pongGame.pApplet.loadImage("img/sun-texture.jpg")
+
     init {
         newBallProperties()
     }
@@ -33,12 +35,21 @@ class PingBallModel(
         pongGame.pApplet.fill(color)
         pongGame.pApplet.noStroke()
         if (!pongGame.pause) move()
-        pongGame.pApplet.ellipse(position.x, position.y, 2f * radius, 2f * radius)
+        drawBall()
         if (!pongGame.pause) {
             increaseSpeed(increaseSpeedStep)
             detectPaddle(pongGame.player1.paddleModel)
             detectPaddle(pongGame.player2.paddleModel)
         }
+    }
+
+    private fun drawBall() {
+        var mask = pongGame.pApplet.createGraphics(ballImage.width, ballImage.height)
+        mask.beginDraw()
+        mask.ellipse(position.x, position.y, radius * 2, radius * 2)
+        mask.endDraw()
+        ballImage.mask(mask)
+        pongGame.pApplet.image(ballImage, 0f, 0f);
     }
 
     private fun detectPaddle(paddle: PaddleModel) {

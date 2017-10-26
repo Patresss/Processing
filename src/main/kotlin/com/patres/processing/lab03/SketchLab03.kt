@@ -26,7 +26,7 @@ class SketchLab03 : PApplet() {
     }
 
     override fun draw() {
-        background(0f, 0f, 0f)
+
         pongGame.draw()
     }
 
@@ -47,6 +47,10 @@ class SketchLab03 : PApplet() {
                 newGame()
             }
         }
+    }
+
+    override fun mouseMoved() {
+        pongGame.player2.changeMousePosition(mouseX)
     }
 
     fun newGame() {
