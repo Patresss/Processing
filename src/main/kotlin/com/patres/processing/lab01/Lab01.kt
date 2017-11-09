@@ -1,7 +1,6 @@
 package com.patres.processing.lab01
 
 import com.patres.processing.lab01.Lab01.Companion.OPTIONS
-import com.patres.processing.lab04.SketchLab04
 import processing.core.PApplet
 
 class Lab01 {

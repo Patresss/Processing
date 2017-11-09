@@ -1,6 +1,5 @@
 package com.patres.processing.lab03
 
-import com.patres.processing.utils.Position
 import processing.core.PApplet
 import processing.core.PConstants
 
