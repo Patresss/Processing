@@ -1,6 +1,6 @@
 package com.patres.processing.lab02
 
-import com.patres.processing.model.BallModel
+import com.patres.processing.lab02.model.BallModel
 import com.patres.processing.utils.RandomGenerator
 import processing.core.PApplet
 import processing.core.PConstants
@@ -8,8 +8,8 @@ import processing.core.PConstants
 class SketchLab02 : PApplet() {
 
     companion object {
-        val SIZE_X = 1000
-        val SIZE_Y = 1000
+        val SIZE_X = 500
+        val SIZE_Y = 500
 
         val INIT_NUMBER_OF_BALLS = 3
 

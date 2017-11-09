@@ -1,6 +1,6 @@
 package com.patres.processing.lab01
 
-import com.patres.processing.model.BallModel
+import com.patres.processing.lab02.model.BallModel
 import com.patres.processing.utils.RandomGenerator
 import processing.core.PApplet
 import processing.core.PConstants

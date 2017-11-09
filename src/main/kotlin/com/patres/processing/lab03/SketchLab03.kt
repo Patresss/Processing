@@ -16,7 +16,6 @@ class SketchLab03 : PApplet() {
     private lateinit var pongGame: PongGame
 
 
-
     override fun settings() {
         size(SIZE_X, SIZE_Y)
     }
@@ -38,22 +37,26 @@ class SketchLab03 : PApplet() {
 
         when (key) {
             'a' -> pongGame.player2.move(Position.LEFT)
-            's' -> pongGame.player2.move(Position.RIGHT)
+            'd' -> pongGame.player2.move(Position.RIGHT)
         }
 
         if (key == ' ') {
-            pongGame.pause = !pongGame.pause
-            if(pongGame.player1.numberOfLife < 0 || pongGame.player2.numberOfLife < 0) {
+            pauseGame()
+            if (pongGame.player1.numberOfLife < 0 || pongGame.player2.numberOfLife < 0) {
                 newGame()
             }
         }
+    }
+
+    private fun pauseGame() {
+        pongGame.pause = !pongGame.pause
     }
 
     override fun mouseMoved() {
         pongGame.player2.changeMousePosition(mouseX)
     }
 
-    fun newGame() {
+    private fun newGame() {
         pongGame = PongGame(pApplet = this, sizeX = SIZE_X, sizeY = SIZE_Y, paddleSpeed = PADDLE_SPEED, numberOfBalls = NUMBER_OF_BALLS)
     }
 

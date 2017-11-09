@@ -1,4 +1,4 @@
-package com.patres.processing.model
+package com.patres.processing.lab02.model
 
 import com.patres.processing.fill
 import com.patres.processing.getContrastColor
