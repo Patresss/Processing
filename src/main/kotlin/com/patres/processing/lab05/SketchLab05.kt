@@ -42,8 +42,14 @@ class SketchLab05 : PApplet() {
     }
 
     private fun removeTouchedBubbles() {
-        soapBubbleFactory.removeBubbles(cameraHandler.getTouchedBubbles(soapBubbleFactory.bubbles))
+        val touchedBubbles = cameraHandler.getTouchedBubbles(soapBubbleFactory.bubbles)
+        soapBubbleFactory.removeLife(touchedBubbles.filter { !it.touched })
+        soapBubbleFactory.bubbles.filter { !touchedBubbles.contains(it) }.forEach { it.touched = false }
+        soapBubbleFactory.bubbles.filter { touchedBubbles.contains(it) }.forEach { it.touched = true }
+
     }
+
+
 
     fun drawInformation() {
         fill(Color.WHITE)

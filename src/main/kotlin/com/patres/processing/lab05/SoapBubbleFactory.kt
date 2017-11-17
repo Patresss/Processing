@@ -44,8 +44,9 @@ class SoapBubbleFactory(
 
     fun shouldDrawNewBubble(): Boolean = (System.currentTimeMillis() - lastCreationTime) > frequencyOfNewBubbles
 
-    fun removeBubbles(bubblesToRemove: List<SoapBubble>) {
-        bubbles.removeAll(bubblesToRemove)
+    fun removeLife(touchedBubbles: List<SoapBubble>) {
+        touchedBubbles.forEach { it.numberOfLife-- }
+        bubbles.removeAll(touchedBubbles.filter { it.numberOfLife <= 0 })
     }
 
 }

@@ -15,11 +15,13 @@ class SoapBubble(
         var position: PVector = PVector(RandomGenerator.generateFloat(max = SketchLab05.CAMERA_RESOLUTION_WIDTH * SketchLab05.SCALE), -radius),
         var color: Color = Color.RED,
         var numberOfLife: Int = 3,
+
         var speedVectorAngle: PVector = RandomGenerator.generateVector(-0.05f, 0.05f)
 ) {
 
     var positionXAngle = 0.0
     var positionYAngle = 0.0
+    var touched = false
 
 
     fun draw() {

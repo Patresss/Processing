@@ -61,7 +61,7 @@ class CameraHandler(
             }
         }
 
-        return bubbles.filter { bubblesPixelsMap[it]!!.toDouble() / it.getNumberOfPixels().toDouble() > acceptableCover }
+        return bubbles.filter { bubblesPixelsMap[it]!!.toDouble() / it.getNumberOfPixels().toDouble() > acceptableCover}
     }
 
 }
