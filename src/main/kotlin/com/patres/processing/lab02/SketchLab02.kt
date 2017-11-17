@@ -1,9 +1,11 @@
 package com.patres.processing.lab02
 
+import com.patres.processing.fill
 import com.patres.processing.lab02.model.BallModel
 import com.patres.processing.utils.RandomGenerator
 import processing.core.PApplet
 import processing.core.PConstants
+import java.awt.Color
 
 class SketchLab02 : PApplet() {
 
@@ -44,7 +46,6 @@ class SketchLab02 : PApplet() {
 
     override fun draw() {
         background(180f, 180f, 180f)
-
         val ballsToCollide = ArrayList<BallModel>(balls)
         balls.forEach {
             ballsToCollide.remove(it)
@@ -56,6 +57,7 @@ class SketchLab02 : PApplet() {
             it.drawNeighbourEffect()
             it.neighbour = null
         }
+
 
     }
 
