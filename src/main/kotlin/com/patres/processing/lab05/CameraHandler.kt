@@ -28,7 +28,7 @@ class CameraHandler(
         opencv.loadImage(camera)
         opencv.flip(OpenCV.HORIZONTAL)
         opencv.updateBackground()
-        opencv.calculateOpticalFlow()
+        //opencv.calculateOpticalFlow()
         opencv.dilate()
         opencv.erode()
         if (diffFrameMode) {

@@ -12,6 +12,7 @@ class SoapBubbleFactory(
 
     var bubbles = ArrayList<SoapBubble>()
     var lastCreationTime = System.currentTimeMillis()
+    var img = pApplet.loadImage("img/lab05/bubble.png")
     var frequencyOfNewBubbles: Int = frequencyOfNewBubbles
         set(value) {
             field = when {
