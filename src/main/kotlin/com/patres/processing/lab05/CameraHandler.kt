@@ -10,9 +10,8 @@ class CameraHandler(
         var opencv: OpenCV,
         var camera: Capture,
         var pApplet: PApplet,
-        var scale: Float = 1f,
         var diffFrameMode: Boolean = false,
-        var acceptableCover: Double = 0.05
+        var acceptableCover: Double = 0.01
 ) {
 
     val output = opencv.output
@@ -24,7 +23,7 @@ class CameraHandler(
     }
 
     fun draw() {
-        pApplet.scale(scale)
+        pApplet.scale(SketchLab05.SCALE)
         opencv.loadImage(camera)
         opencv.flip(OpenCV.HORIZONTAL)
         opencv.updateBackground()
@@ -45,7 +44,7 @@ class CameraHandler(
     private fun drawImageFromCamera() {
         pApplet.pushMatrix()
         pApplet.scale(-1f, 1f)
-        pApplet.image(camera.get(), -pApplet.width.toFloat() / scale, 0f)
+        pApplet.image(camera.get(), -pApplet.width.toFloat() / SketchLab05.SCALE, 0f)
         pApplet.popMatrix()
     }
 

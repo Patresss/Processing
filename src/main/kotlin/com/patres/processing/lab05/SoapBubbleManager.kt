@@ -3,7 +3,7 @@ package com.patres.processing.lab05
 import com.patres.processing.lab05.model.SoapBubble
 import processing.core.PApplet
 
-class SoapBubbleFactory(
+class SoapBubbleManager(
         val pApplet: PApplet,
         val speedX: Float = 3f,
         speedY: Float = 10f,
@@ -31,7 +31,7 @@ class SoapBubbleFactory(
 
     fun draw() {
         if (shouldDrawNewBubble()) {
-            bubbles.add(SoapBubble(pApplet = pApplet, factory = this))
+            bubbles.add(SoapBubble(pApplet = pApplet, manager = this))
             lastCreationTime = System.currentTimeMillis()
         }
         removeBubbleOffTheScreen()
