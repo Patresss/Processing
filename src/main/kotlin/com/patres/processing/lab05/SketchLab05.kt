@@ -11,7 +11,7 @@ import java.awt.Color
 class SketchLab05 : PApplet() {
 
     companion object {
-        val SCALE = 1f
+        val SCALE = 2f
         val CAMERA_RESOLUTION_WIDTH = 640
         val CAMERA_RESOLUTION_HEIGHT = 480
     }
@@ -57,6 +57,14 @@ class SketchLab05 : PApplet() {
         if (key == ' ') {
             cameraHandler.diffFrameMode = !cameraHandler.diffFrameMode
         }
+
+        if (key == 's') {
+            cameraHandler.saveCameraBackground()
+        }
+        if (key == 'b') {
+            cameraHandler.backgroundMode = !cameraHandler.backgroundMode
+        }
+
 
         when (keyCode) {
             PConstants.UP -> soapBubbleManager.speedY += 0.1f
