@@ -13,10 +13,11 @@ class CameraHandler(
         var pApplet: PApplet,
         var diffFrameMode: Boolean = false,
         var backgroundMode: Boolean = false,
+        var transparentDiffMode: Boolean = false,
         var acceptableCover: Double = 0.01
 ) {
 
-    val output = opencv.output
+    var output = opencv.output
     var cameraBackground: PImage = PImage()
     var background = pApplet.loadImage("img/lab05/garden.jpg")!!
 
@@ -28,7 +29,6 @@ class CameraHandler(
     }
 
     fun draw() {
-        pApplet.scale(SketchLab05.SCALE)
         opencv.loadImage(camera)
         opencv.flip(OpenCV.HORIZONTAL)
         opencv.updateBackground()
@@ -42,18 +42,50 @@ class CameraHandler(
         }
     }
 
+    fun getTouchedBubbles(bubbles: ArrayList<SoapBubble>): List<SoapBubble> {
+        val bubblesPixelsMap = HashMap(bubbles.associateBy({ it }, { 0 }))
+        output = opencv.output
+        output.loadPixels()
+        for (x in 1..output.width) {
+            for (y in 1..output.height) {
+                if (pApplet.brightness(output.get(x, y)) >= 255) {
+                    bubbles.filter { it.containsPixel(x, y) }.forEach { bubblesPixelsMap.put(it, bubblesPixelsMap[it]?.plus(1)) }
+                }
+            }
+        }
+
+        return bubbles.filter { bubblesPixelsMap[it]!!.toDouble() / it.getNumberOfPixels().toDouble() > acceptableCover }
+    }
+
+    fun saveCameraBackground() {
+        cameraBackground = getFlipVerticalImage(camera.get())
+    }
+
     private fun drawDiffFrame() {
         pApplet.image(opencv.output, 0f, 0f)
     }
 
     private fun drawImageFromCamera() {
         val flipVerticalImage = getFlipVerticalImage(camera.get())
-        if(backgroundMode) {
+        if (backgroundMode) {
             drawImageWithBackground(flipVerticalImage)
         } else {
+            if (transparentDiffMode) {
+                drawDiffInImage(flipVerticalImage)
+            }
             pApplet.image(flipVerticalImage, 0f, 0f)
         }
 
+    }
+
+    private fun drawDiffInImage(flipVerticalImage: PImage) {
+        for (x in 1..output.width) {
+            for (y in 1..output.height) {
+                if (pApplet.brightness(output.get(x, y)) >= 255) {
+                    flipVerticalImage.set(x, y, output.get(x, y))
+                }
+            }
+        }
     }
 
     private fun drawImageWithBackground(flipVerticalImage: PImage) {
@@ -77,7 +109,7 @@ class CameraHandler(
         pApplet.image(imageWithBackground, 0f, 0f)
     }
 
-    fun getFlipVerticalImage(original: PImage): PImage {
+    private fun getFlipVerticalImage(original: PImage): PImage {
         val verticalImage = PImage(original.width, original.height)
         for (w in 0..original.width) {
             for (h in 0..original.height) {
@@ -88,24 +120,5 @@ class CameraHandler(
         return verticalImage
     }
 
-
-    fun getTouchedBubbles(bubbles: ArrayList<SoapBubble>): List<SoapBubble> {
-        val bubblesPixelsMap = HashMap(bubbles.associateBy({ it }, { 0 }))
-        val output = opencv.output
-        output.loadPixels()
-        for (x in 1..output.width) {
-            for (y in 1..output.height) {
-                if (pApplet.brightness(output.get(x, y)) >= 255) {
-                    bubbles.filter { it.containsPixel(x, y) }.forEach { bubblesPixelsMap.put(it, bubblesPixelsMap[it]?.plus(1)) }
-                }
-            }
-        }
-
-        return bubbles.filter { bubblesPixelsMap[it]!!.toDouble() / it.getNumberOfPixels().toDouble() > acceptableCover}
-    }
-
-    fun saveCameraBackground() {
-        cameraBackground = getFlipVerticalImage(camera.get())
-    }
 
 }

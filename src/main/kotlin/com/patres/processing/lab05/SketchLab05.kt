@@ -3,8 +3,8 @@ package com.patres.processing.lab05
 import com.patres.processing.fill
 import gab.opencv.OpenCV
 import processing.core.PApplet
-import processing.video.Capture
 import processing.core.PConstants
+import processing.video.Capture
 import java.awt.Color
 
 
@@ -37,7 +37,15 @@ class SketchLab05 : PApplet() {
         cameraHandler.draw()
         soapBubbleManager.draw()
         removeTouchedBubbles()
+        scale()
         drawInformation()
+    }
+
+    private fun scale() {
+        pushMatrix()
+        scale(SCALE, SCALE)
+        image(get(), 0f, 0f)
+        popMatrix()
     }
 
     private fun removeTouchedBubbles() {
@@ -54,17 +62,12 @@ class SketchLab05 : PApplet() {
     }
 
     override fun keyPressed() {
-        if (key == ' ') {
-            cameraHandler.diffFrameMode = !cameraHandler.diffFrameMode
+        when (key) {
+            ' ' -> cameraHandler.diffFrameMode = !cameraHandler.diffFrameMode
+            'b' -> cameraHandler.backgroundMode = !cameraHandler.backgroundMode
+            't' -> cameraHandler.transparentDiffMode = !cameraHandler.transparentDiffMode
+            's' -> cameraHandler.saveCameraBackground()
         }
-
-        if (key == 's') {
-            cameraHandler.saveCameraBackground()
-        }
-        if (key == 'b') {
-            cameraHandler.backgroundMode = !cameraHandler.backgroundMode
-        }
-
 
         when (keyCode) {
             PConstants.UP -> soapBubbleManager.speedY += 0.1f
@@ -78,6 +81,5 @@ class SketchLab05 : PApplet() {
     fun captureEvent(c: Capture) {
         c.read()
     }
-
 
 }
