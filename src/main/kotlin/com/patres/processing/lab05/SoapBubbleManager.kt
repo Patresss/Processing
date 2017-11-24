@@ -2,6 +2,7 @@ package com.patres.processing.lab05
 
 import com.patres.processing.lab05.model.SoapBubble
 import processing.core.PApplet
+import processing.core.PImage
 
 class SoapBubbleManager(
         val pApplet: PApplet,
@@ -9,10 +10,8 @@ class SoapBubbleManager(
         speedY: Float = 10f,
         frequencyOfNewBubbles: Int = 1000
 ) {
-
     var bubbles = ArrayList<SoapBubble>()
-    var lastCreationTime = System.currentTimeMillis()
-    var img = pApplet.loadImage("img/lab05/bubble.png")
+    var img = pApplet.loadImage("img/lab05/bubble.png")?: PImage()
     var frequencyOfNewBubbles: Int = frequencyOfNewBubbles
         set(value) {
             field = when {
@@ -20,7 +19,6 @@ class SoapBubbleManager(
                 else -> value
             }
         }
-
     var speedY: Float = speedY
         set(value) {
             field = when {
@@ -28,6 +26,7 @@ class SoapBubbleManager(
                 else -> value
             }
         }
+    private var lastCreationTime = System.currentTimeMillis()
 
     fun draw() {
         if (shouldDrawNewBubble()) {
@@ -39,15 +38,15 @@ class SoapBubbleManager(
         bubbles.forEach { it.draw() }
     }
 
-    fun removeBubbleOffTheScreen() {
-        bubbles.removeIf { it.isInScreen() }
-    }
-
-    fun shouldDrawNewBubble(): Boolean = (System.currentTimeMillis() - lastCreationTime) > frequencyOfNewBubbles
-
     fun removeLife(touchedBubbles: List<SoapBubble>) {
         touchedBubbles.forEach { it.numberOfLife-- }
         bubbles.removeAll(touchedBubbles.filter { it.numberOfLife <= 0 })
     }
+
+    private fun removeBubbleOffTheScreen() {
+        bubbles.removeIf { it.isInScreen() }
+    }
+
+    private fun shouldDrawNewBubble(): Boolean = (System.currentTimeMillis() - lastCreationTime) > frequencyOfNewBubbles
 
 }

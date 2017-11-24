@@ -1,5 +1,6 @@
 package com.patres.processing.lab05
 
+import com.patres.processing.flipVerticalImage
 import com.patres.processing.lab05.model.SoapBubble
 import gab.opencv.OpenCV
 import processing.core.PApplet
@@ -8,44 +9,36 @@ import processing.video.Capture
 import java.util.*
 
 class CameraHandler(
-        var opencv: OpenCV,
+        var openCv: OpenCV,
         var camera: Capture,
         var pApplet: PApplet,
-        var diffFrameMode: Boolean = false,
         var backgroundMode: Boolean = false,
         var transparentDiffMode: Boolean = false,
-        var acceptableCover: Double = 0.01
+        private var acceptableCover: Double = 0.01
 ) {
 
-    var output = opencv.output
-    var cameraBackground: PImage = PImage()
-    var background = pApplet.loadImage("img/lab05/garden.jpg")!!
+    private var output = openCv.output.flipVerticalImage()
+    private var cameraBackground: PImage = PImage()
+    private var background = pApplet.loadImage("img/lab05/garden.jpg")!!
 
     fun setup() {
         camera.start()
         camera.read()
-        opencv.startBackgroundSubtraction(1, 3, 0.5)
+        openCv.startBackgroundSubtraction(1, 3, 0.5)
         saveCameraBackground()
     }
 
     fun draw() {
-        opencv.loadImage(camera)
-        opencv.flip(OpenCV.HORIZONTAL)
-        opencv.updateBackground()
-        //opencv.calculateOpticalFlow()
-        opencv.dilate()
-        opencv.erode()
-        if (diffFrameMode) {
-            drawDiffFrame()
-        } else {
-            drawImageFromCamera()
-        }
+        openCv.loadImage(camera)
+        openCv.updateBackground()
+        openCv.dilate()
+        openCv.erode()
+        output = openCv.output.flipVerticalImage()
+        drawImageFromCamera()
     }
 
     fun getTouchedBubbles(bubbles: ArrayList<SoapBubble>): List<SoapBubble> {
         val bubblesPixelsMap = HashMap(bubbles.associateBy({ it }, { 0 }))
-        output = opencv.output
-        output.loadPixels()
         for (x in 1..output.width) {
             for (y in 1..output.height) {
                 if (pApplet.brightness(output.get(x, y)) >= 255) {
@@ -58,67 +51,57 @@ class CameraHandler(
     }
 
     fun saveCameraBackground() {
-        cameraBackground = getFlipVerticalImage(camera.get())
-    }
-
-    private fun drawDiffFrame() {
-        pApplet.image(opencv.output, 0f, 0f)
+        cameraBackground = camera.get().flipVerticalImage()
     }
 
     private fun drawImageFromCamera() {
-        val flipVerticalImage = getFlipVerticalImage(camera.get())
+        val cameraImage = camera.get().flipVerticalImage()
         if (backgroundMode) {
-            drawImageWithBackground(flipVerticalImage)
+            drawImageWithBackground(cameraImage)
+            addTransparentDiff(cameraImage)
         } else {
-            if (transparentDiffMode) {
-                drawDiffInImage(flipVerticalImage)
-            }
-            pApplet.image(flipVerticalImage, 0f, 0f)
+            addTransparentDiff(cameraImage)
+            pApplet.image(cameraImage, 0f, 0f, SketchLab05.CAMERA_RESOLUTION_WIDTH * SketchLab05.SCALE, SketchLab05.CAMERA_RESOLUTION_HEIGHT * SketchLab05.SCALE)
         }
 
     }
 
-    private fun drawDiffInImage(flipVerticalImage: PImage) {
+    private fun addTransparentDiff(image: PImage) {
+        if (transparentDiffMode) {
+            drawDiffInImage(image)
+        }
+    }
+
+    private fun drawDiffInImage(image: PImage) {
         for (x in 1..output.width) {
             for (y in 1..output.height) {
-                if (pApplet.brightness(output.get(x, y)) >= 255) {
-                    flipVerticalImage.set(x, y, output.get(x, y))
+                if (pApplet.brightness(output.get(x, y)) >= 100) {
+                    image.set(x, y, output.get(x, y))
                 }
             }
         }
     }
 
-    private fun drawImageWithBackground(flipVerticalImage: PImage) {
+    private fun drawImageWithBackground(image: PImage) {
         val imageWithBackground = background.copy()
-        for (x in 1..flipVerticalImage.width) {
-            for (y in 1..flipVerticalImage.height) {
-                val fgColor = flipVerticalImage.get(x, y)
-                val bgColor = cameraBackground.get(x, y)
-                val r1 = pApplet.red(fgColor)
-                val g1 = pApplet.green(fgColor)
-                val b1 = pApplet.blue(fgColor)
-                val r2 = pApplet.red(bgColor)
-                val g2 = pApplet.green(bgColor)
-                val b2 = pApplet.blue(bgColor)
+        for (x in 1..image.width) {
+            for (y in 1..image.height) {
+                val foregroundColor = image.get(x, y)
+                val cameraBackgroundColor = cameraBackground.get(x, y)
+                val imageBackground = imageWithBackground.get(x, y)
+                val r1 = pApplet.red(foregroundColor)
+                val g1 = pApplet.green(foregroundColor)
+                val b1 = pApplet.blue(foregroundColor)
+                val r2 = pApplet.red(cameraBackgroundColor)
+                val g2 = pApplet.green(cameraBackgroundColor)
+                val b2 = pApplet.blue(cameraBackgroundColor)
                 val diff = PApplet.dist(r1, g1, b1, r2, g2, b2)
-                if (diff > 40) {
-                    imageWithBackground.set(x, y, fgColor)
+                if (diff < 30) {
+                    image.set(x, y, imageBackground)
                 }
             }
         }
-        pApplet.image(imageWithBackground, 0f, 0f)
+        pApplet.image(image, 0f, 0f, SketchLab05.CAMERA_RESOLUTION_WIDTH * SketchLab05.SCALE, SketchLab05.CAMERA_RESOLUTION_HEIGHT * SketchLab05.SCALE)
     }
-
-    private fun getFlipVerticalImage(original: PImage): PImage {
-        val verticalImage = PImage(original.width, original.height)
-        for (w in 0..original.width) {
-            for (h in 0..original.height) {
-                val orgColor = original.get(w, h)
-                verticalImage.set(original.width - w, h, orgColor)
-            }
-        }
-        return verticalImage
-    }
-
 
 }
