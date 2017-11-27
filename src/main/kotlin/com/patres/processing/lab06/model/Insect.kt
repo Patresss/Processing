@@ -12,7 +12,8 @@ class Insect(
         val manager: InsectManager,
         private val radius: Float = RandomGenerator.generateFloat(min = 10f, max = 30f),
         private var position: PVector = PVector(RandomGenerator.generateFloat(max = SketchLab06.CAMERA_RESOLUTION_WIDTH - radius), RandomGenerator.generateFloat(max = SketchLab06.CAMERA_RESOLUTION_HEIGHT - radius)),
-        private var moveSpeed: PVector = RandomGenerator.generateVector(-10f, 10f)
+        private var moveSpeed: PVector = RandomGenerator.generateVector(-3f, 3f),
+        private var speedVectorAngle: PVector = RandomGenerator.generateVector(-0.05f, 0.05f)
 ) {
 
     companion object {
@@ -20,6 +21,8 @@ class Insect(
     }
 
     var alive = true
+    var positionXAngle = 0.0
+    var positionYAngle = 0.0
 
     fun draw() {
         move()
@@ -40,14 +43,16 @@ class Insect(
         if (alive) {
             aliveMove()
         } else {
-            position.y += Math.abs(moveSpeed.y) * 3
+            position.y += Math.abs(moveSpeed.y) * 3 + 5
         }
 
     }
 
     private fun aliveMove() {
-        position.x += moveSpeed.x * pApplet.noise(NOISE_SCALE * pApplet.frameCount.toFloat() * manager.insects.indexOf(this))
-        position.y += moveSpeed.y * pApplet.noise(NOISE_SCALE * pApplet.frameCount.toFloat() / 3 * manager.insects.indexOf(this))
+        positionXAngle += speedVectorAngle.x
+        positionYAngle += speedVectorAngle.y
+        position.x += Math.abs(Math.sin(positionXAngle)).toFloat() * moveSpeed.x * pApplet.noise(NOISE_SCALE * pApplet.frameCount.toFloat() *  manager.insects.indexOf(this).toFloat()) / manager.frameSpeedBooster
+        position.y +=  Math.abs(Math.cos(positionYAngle)).toFloat() * moveSpeed.y * pApplet.noise(NOISE_SCALE * pApplet.frameCount.toFloat() / 3 *  manager.insects.indexOf(this).toFloat()) / manager.frameSpeedBooster
 
         if (position.x - radius < 0) {
             moveSpeed.x = Math.abs(moveSpeed.x)

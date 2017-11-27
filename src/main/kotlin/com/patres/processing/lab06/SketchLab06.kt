@@ -34,7 +34,7 @@ class SketchLab06 : PApplet() {
     override fun draw() {
         cameraHandler.draw()
         drawInformation()
-        if (frameCount > 30) {
+        if (frameCount > 20) {
             manager.draw()
             killTouchedInsects()
         }
