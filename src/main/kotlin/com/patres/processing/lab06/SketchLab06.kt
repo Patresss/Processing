@@ -1,4 +1,4 @@
-package com.patres.processing.lab05
+package com.patres.processing.lab06
 
 import com.patres.processing.fill
 import gab.opencv.OpenCV
@@ -8,20 +8,20 @@ import processing.video.Capture
 import java.awt.Color
 
 
-class SketchLab05 : PApplet() {
+class SketchLab06 : PApplet() {
 
     companion object {
-        val SCALE = 2f
+        val SCALE = 1f
         val CAMERA_RESOLUTION_WIDTH = 640
         val CAMERA_RESOLUTION_HEIGHT = 480
     }
 
     private lateinit var cameraHandler: CameraHandler
-    private lateinit var soapBubbleManager: SoapBubbleManager
+    private lateinit var manager: InsectManager
 
     override fun settings() {
         size((CAMERA_RESOLUTION_WIDTH * SCALE).toInt(), (CAMERA_RESOLUTION_HEIGHT * SCALE).toInt())
-        soapBubbleManager = SoapBubbleManager(this)
+        manager = InsectManager(this)
         val openCv = OpenCV(this, CAMERA_RESOLUTION_WIDTH, CAMERA_RESOLUTION_HEIGHT)
         val camera = Capture(this, CAMERA_RESOLUTION_WIDTH, CAMERA_RESOLUTION_HEIGHT)
         cameraHandler = CameraHandler(pApplet = this, openCv = openCv, camera = camera)
@@ -34,8 +34,8 @@ class SketchLab05 : PApplet() {
 
     override fun draw() {
         cameraHandler.draw()
-        soapBubbleManager.draw()
-        removeTouchedBubbles()
+        manager.draw()
+        killTouchedInsects()
         drawInformation()
     }
 
@@ -46,26 +46,17 @@ class SketchLab05 : PApplet() {
             's' -> cameraHandler.saveCameraBackground()
         }
 
-        when (keyCode) {
-            PConstants.UP -> soapBubbleManager.speedY += 0.1f
-            PConstants.DOWN -> soapBubbleManager.speedY -= 0.1f
-            PConstants.LEFT -> soapBubbleManager.frequencyOfNewBubbles -= 100
-            PConstants.RIGHT -> soapBubbleManager.frequencyOfNewBubbles += 100
-        }
-
     }
 
-    private fun removeTouchedBubbles() {
-        val touchedBubbles = cameraHandler.getTouchedBubbles(soapBubbleManager.bubbles)
-        soapBubbleManager.removeLife(touchedBubbles.filter { !it.touched })
-        soapBubbleManager.bubbles.forEach { it.touched = touchedBubbles.contains(it) }
+    private fun killTouchedInsects() {
+        val touchedInsects = cameraHandler.getTouchedInsect(manager.insects)
+        touchedInsects.forEach { it.alive = false }
     }
 
     private fun drawInformation() {
         fill(Color.WHITE)
         text("Frame: $frameRate", 10f, 20f)
-        text("Number of insects: ${soapBubbleManager.bubbles.size}", 10f, 40f)
-        text("Frequency of new insects: ${soapBubbleManager.frequencyOfNewBubbles / 1000f} s", 10f, 60f)
+        text("Number of insects: ${manager.insects.size}", 10f, 40f)
     }
 
     fun captureEvent(c: Capture) {

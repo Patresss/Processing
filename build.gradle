@@ -27,6 +27,7 @@ dependencies {
     compile files('lib/video/gstreamer-java.jar')
     compile files('lib/opencv_processing/opencv_processing.jar')
     compile files('lib/opencv_processing/opencv-245.jar')
+    compile files('lib/gif-animation/GifAnimation.jar')
 }
 
 compileKotlin {

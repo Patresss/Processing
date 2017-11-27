@@ -57,8 +57,6 @@ class SketchLab02 : PApplet() {
             it.drawNeighbourEffect()
             it.neighbour = null
         }
-
-
     }
 
 
