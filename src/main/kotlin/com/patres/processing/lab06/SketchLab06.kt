@@ -3,7 +3,6 @@ package com.patres.processing.lab06
 import com.patres.processing.fill
 import gab.opencv.OpenCV
 import processing.core.PApplet
-import processing.core.PConstants
 import processing.video.Capture
 import java.awt.Color
 
@@ -11,7 +10,7 @@ import java.awt.Color
 class SketchLab06 : PApplet() {
 
     companion object {
-        val SCALE = 1f
+        val SCALE = 2f
         val CAMERA_RESOLUTION_WIDTH = 640
         val CAMERA_RESOLUTION_HEIGHT = 480
     }
@@ -34,9 +33,11 @@ class SketchLab06 : PApplet() {
 
     override fun draw() {
         cameraHandler.draw()
-        manager.draw()
-        killTouchedInsects()
         drawInformation()
+        if (frameCount > 30) {
+            manager.draw()
+            killTouchedInsects()
+        }
     }
 
     override fun keyPressed() {
@@ -45,7 +46,6 @@ class SketchLab06 : PApplet() {
             'b' -> cameraHandler.backgroundMode = !cameraHandler.backgroundMode
             's' -> cameraHandler.saveCameraBackground()
         }
-
     }
 
     private fun killTouchedInsects() {

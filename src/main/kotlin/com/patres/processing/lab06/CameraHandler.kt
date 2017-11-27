@@ -43,7 +43,7 @@ class CameraHandler(
         for (x in 1..output.width) {
             for (y in 1..output.height) {
                 if (pApplet.brightness(output.get(x, y)) >= 255) {
-                       insects.filter { it.containsPixel(x, y) }.forEach { insectsPixelsMap.put(it, insectsPixelsMap[it]?.plus(1)) }
+                    insects.filter { it.containsPixel(x, y) }.forEach { insectsPixelsMap.put(it, insectsPixelsMap[it]?.plus(1)) }
                 }
             }
         }

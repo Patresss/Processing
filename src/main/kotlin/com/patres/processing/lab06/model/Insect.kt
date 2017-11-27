@@ -18,6 +18,7 @@ class Insect(
     companion object {
         val NOISE_SCALE = 0.03f
     }
+
     var alive = true
 
     fun draw() {
@@ -26,7 +27,7 @@ class Insect(
         val scaledY = (position.y - radius) * SketchLab06.SCALE
         val scaledRadius = radius * SketchLab06.SCALE
         val image = if (alive) manager.aliveInsect else manager.deadInsect
-        pApplet.image(image, scaledX, scaledY , scaledRadius * 2, scaledRadius * 2)
+        pApplet.image(image, scaledX, scaledY, scaledRadius * 2, scaledRadius * 2)
     }
 
     fun isInScreen(): Boolean = position.y - radius > pApplet.height
@@ -36,10 +37,10 @@ class Insect(
     fun getNumberOfPixels(): Int = (Math.pow(radius * 2.0, 2.0).toInt() * Math.PI / 4.0).toInt()
 
     private fun move() {
-        if(alive) {
+        if (alive) {
             aliveMove()
         } else {
-            position.y += Math.abs(moveSpeed.y)
+            position.y += Math.abs(moveSpeed.y) * 3
         }
 
     }

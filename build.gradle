@@ -2,7 +2,7 @@ group 'com.patres.processing'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.1.60'
+    ext.kotlin_version = '1.1.61'
 
     repositories {
         mavenCentral()
@@ -27,7 +27,6 @@ dependencies {
     compile files('lib/video/gstreamer-java.jar')
     compile files('lib/opencv_processing/opencv_processing.jar')
     compile files('lib/opencv_processing/opencv-245.jar')
-    compile files('lib/gif-animation/GifAnimation.jar')
 }
 
 compileKotlin {
