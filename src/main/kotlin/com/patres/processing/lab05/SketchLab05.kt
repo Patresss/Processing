@@ -11,7 +11,7 @@ import java.awt.Color
 class SketchLab05 : PApplet() {
 
     companion object {
-        val SCALE = 2f
+        val SCALE = 1f
         val CAMERA_RESOLUTION_WIDTH = 640
         val CAMERA_RESOLUTION_HEIGHT = 480
     }

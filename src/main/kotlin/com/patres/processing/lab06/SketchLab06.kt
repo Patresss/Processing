@@ -3,6 +3,7 @@ package com.patres.processing.lab06
 import com.patres.processing.fill
 import gab.opencv.OpenCV
 import processing.core.PApplet
+import processing.core.PConstants
 import processing.video.Capture
 import java.awt.Color
 
@@ -10,13 +11,14 @@ import java.awt.Color
 class SketchLab06 : PApplet() {
 
     companion object {
-        val SCALE = 2f
         val CAMERA_RESOLUTION_WIDTH = 640
         val CAMERA_RESOLUTION_HEIGHT = 480
+        val SCALE = 640 / CAMERA_RESOLUTION_WIDTH.toFloat()
     }
 
     private lateinit var cameraHandler: CameraHandler
     private lateinit var manager: InsectManager
+    var showMove = false
 
     override fun settings() {
         size((CAMERA_RESOLUTION_WIDTH * SCALE).toInt(), (CAMERA_RESOLUTION_HEIGHT * SCALE).toInt())
@@ -32,11 +34,16 @@ class SketchLab06 : PApplet() {
     }
 
     override fun draw() {
-        cameraHandler.draw()
+        if(!showMove) {
+            cameraHandler.draw()
+        }
+
         drawInformation()
         if (frameCount > 20) {
             manager.draw()
-            killTouchedInsects()
+            if(!showMove) {
+                killTouchedInsects()
+            }
         }
     }
 
@@ -45,6 +52,12 @@ class SketchLab06 : PApplet() {
             ' ' -> cameraHandler.transparentDiffMode = !cameraHandler.transparentDiffMode
             'b' -> cameraHandler.backgroundMode = !cameraHandler.backgroundMode
             's' -> cameraHandler.saveCameraBackground()
+            'm' -> showMove = !showMove
+        }
+
+        when (keyCode) {
+            PConstants.LEFT -> manager.numberOfInsects--
+            PConstants.RIGHT -> manager.numberOfInsects++
         }
     }
 

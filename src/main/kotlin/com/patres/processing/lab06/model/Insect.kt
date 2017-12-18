@@ -21,8 +21,7 @@ class Insect(
     }
 
     var alive = true
-    var positionXAngle = 0.0
-    var positionYAngle = 0.0
+    var positionAngle = PVector(0f, 0f)
 
     fun draw() {
         move()
@@ -49,10 +48,12 @@ class Insect(
     }
 
     private fun aliveMove() {
-        positionXAngle += speedVectorAngle.x
-        positionYAngle += speedVectorAngle.y
-        position.x += Math.abs(Math.sin(positionXAngle)).toFloat() * moveSpeed.x * pApplet.noise(NOISE_SCALE * pApplet.frameCount.toFloat() *  manager.insects.indexOf(this).toFloat()) / manager.frameSpeedBooster
-        position.y +=  Math.abs(Math.cos(positionYAngle)).toFloat() * moveSpeed.y * pApplet.noise(NOISE_SCALE * pApplet.frameCount.toFloat() / 3 *  manager.insects.indexOf(this).toFloat()) / manager.frameSpeedBooster
+        positionAngle.x += speedVectorAngle.x
+        positionAngle.y += speedVectorAngle.y
+
+        val insectPosition = manager.insects.indexOf(this).toFloat() + 1f
+        position.x += Math.abs(PApplet.sin(positionAngle.x)) * moveSpeed.x * pApplet.noise(NOISE_SCALE * pApplet.frameCount.toFloat() * insectPosition) / manager.frameSpeedBooster
+        position.y += Math.abs(PApplet.cos(positionAngle.y)) * moveSpeed.y * pApplet.noise(NOISE_SCALE * pApplet.frameCount.toFloat() / 2 *  insectPosition) / manager.frameSpeedBooster
 
         if (position.x - radius < 0) {
             moveSpeed.x = Math.abs(moveSpeed.x)
