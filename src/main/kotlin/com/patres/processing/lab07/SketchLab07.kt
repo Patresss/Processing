@@ -17,7 +17,7 @@ class SketchLab07 : PApplet() {
         val SIZE_Y = 1080
     }
 
-    lateinit var cannon: Cannon
+    lateinit var board: Board
     lateinit var box2d: Box2DProcessing
 
     var startPressedTime: Long? = null
@@ -31,9 +31,9 @@ class SketchLab07 : PApplet() {
         background(255)
         box2d = Box2DProcessing(this).apply {
             createWorld()
-            setGravity(0f, -100f)
+            setGravity(0f, -50f)
         }
-        cannon = Cannon(pApplet = this, box2d = box2d)
+        board = Board(pApplet = this, box2d = box2d)
     }
 
     override fun draw() {
@@ -43,15 +43,15 @@ class SketchLab07 : PApplet() {
 
         background(255)
         box2d.step()
-        cannon.draw()
+        board.draw()
 
         drawInformation()
     }
 
     override fun keyPressed() {
         when (keyCode) {
-            PConstants.LEFT -> cannon.changeAngle(false)
-            PConstants.RIGHT -> cannon.changeAngle(true)
+            PConstants.LEFT -> board.cannon.changeAngle(false)
+            PConstants.RIGHT -> board.cannon.changeAngle(true)
         }
     }
 
@@ -66,7 +66,7 @@ class SketchLab07 : PApplet() {
     }
 
     override fun mouseReleased() {
-        cannon.shot(currentPower)
+        board.cannon.shot(currentPower)
         currentPower = 0
         startPressedTime = null
     }
