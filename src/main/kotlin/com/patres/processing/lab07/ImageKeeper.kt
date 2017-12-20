@@ -8,5 +8,6 @@ class ImageKeeper(val pApplet: PApplet) {
     val background: PImage = pApplet.loadImage("img/lab07/background.png") ?: PImage()
     val cannonImage: PImage = pApplet.loadImage("img/lab07/cannon.png") ?: PImage()
     val snowBall: PImage = pApplet.loadImage("img/lab07/snowball.png") ?: PImage()
+    val ice: PImage = pApplet.loadImage("img/lab07/ice.png") ?: PImage()
 
 }
