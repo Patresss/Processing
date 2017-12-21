@@ -20,6 +20,8 @@ class Bullet(
     lateinit var body: Body
     val pApplet: PApplet = cannon.pApplet
     val image = cannon.board.imageKeeper.snowBall
+    private val numverOfPreviusImage = 30
+    var previousPositions = ArrayList<Vec2>()
 
     init {
         makeBody(position.x, position.y, image.height /2f)
@@ -38,16 +40,26 @@ class Bullet(
         return false
     }
 
+
+
     fun display() {
         val pos = box2d.getBodyPixelCoord(body)
-        val a = body.angle
-        pApplet.run {
-            pushMatrix()
-            translate(pos.x, pos.y)
-            rotate(-a)
-            image(image, -image.width / 2f, -image.height / 2f)
-            popMatrix()
+        previousPositions.add(pos)
+        previousPositions = ArrayList(previousPositions.takeLast(numverOfPreviusImage))
+        var counter = 0f
+        previousPositions.reversed().forEach {
+            val a = body.angle
+            pApplet.run {
+                pushMatrix()
+                translate(it.x, it.y)
+                rotate(-a)
+                tint(255f, 255f / ++counter)
+                image(image, -image.width / 2f, -image.height / 2f)
+
+                popMatrix()
+            }
         }
+        pApplet.tint(255f, 255f)
     }
 
     fun makeBody(x: Float, y: Float, r: Float) {
