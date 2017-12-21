@@ -1,21 +1,18 @@
 package com.patres.processing.lab07
 
 import com.patres.processing.fill
-import org.jbox2d.dynamics.BodyDef
 import org.jbox2d.dynamics.contacts.Contact
 import processing.core.PApplet
 import processing.core.PConstants
-import java.awt.Color
 import shiffman.box2d.Box2DProcessing
-
-
-
+import java.awt.Color
 
 class SketchLab07 : PApplet() {
 
     companion object {
         val SIZE_X = 1920
         val SIZE_Y = 1080
+        val DEBUG_MODE = true
     }
 
     lateinit var board: Board
@@ -32,7 +29,7 @@ class SketchLab07 : PApplet() {
         background(255)
         box2d = Box2DProcessing(this).apply {
             createWorld()
-            setGravity(0f, -50f)
+            setGravity(0f, -100f)
         }
         box2d.listenForCollisions()
         board = Board(pApplet = this, box2d = box2d)
@@ -49,7 +46,9 @@ class SketchLab07 : PApplet() {
         box2d.listenForCollisions()
         board.draw()
 
-        drawInformation()
+        if (DEBUG_MODE) {
+            drawInformation()
+        }
     }
 
     override fun keyPressed() {
@@ -60,13 +59,26 @@ class SketchLab07 : PApplet() {
     }
 
     private fun drawInformation() {
-        fill(Color.BLUE)
-        text("Klatki         : $frameRate", 10f, 20f)
-        text("Moc            : $currentPower", 10f, 40f)
-        text("Poziom         : ${board.level}", 10f, 60f)
-        text("Punkty         : ${board.points}", 10f, 80f)
-        text("Strącone bloki : ${board.downObstacles}", 10f, 100f)
-        text("Strzały        : ${board.cannon.counterShot}", 10f, 120f)
+        fill(Color.WHITE)
+        textSize(50f)
+
+        if (board.level <= Board.FINAL_LEVEL) {
+            textAlign(PConstants.CENTER)
+            text("Poziom         : ${board.level}", board.image.width / 2f, 150f)
+        }
+
+        if (DEBUG_MODE) {
+            fill(Color.BLUE)
+            textSize(10f)
+            textAlign(PConstants.LEFT)
+
+            text("Klatki         : $frameRate", 10f, 20f)
+            text("Moc            : $currentPower", 10f, 40f)
+            text("Poziom         : ${board.level}", 10f, 60f)
+            text("Punkty         : ${board.points}", 10f, 80f)
+            text("Strącone bloki : ${board.downObstacles}", 10f, 100f)
+            text("Strzały        : ${board.cannon.counterShot}", 10f, 120f)
+        }
     }
 
     override fun mousePressed() {

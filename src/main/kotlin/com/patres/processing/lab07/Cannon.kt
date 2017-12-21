@@ -17,6 +17,7 @@ class Cannon(
     val position: PVector = PVector(-image.width / 2f, -image.height / 2f)
     val translatePosition: PVector = PVector(image.width / 2f, pApplet.height.toFloat() - image.height)
     var counterShot = 0
+    private val cannonAngle = Math.toRadians(-10.0)
     var angle: Float = Math.PI.toFloat() / 4f
         set(value) {
             field = when {
@@ -32,9 +33,9 @@ class Cannon(
     }
 
     fun setup() {
-        val x = pApplet.mouseX.toDouble()
-        val y = (pApplet.height - pApplet.mouseY).toDouble()
-        angle = Math.atan(x / y).toFloat()
+        val x = pApplet.mouseX.toDouble() + board.cannon.position.x
+        val y = (pApplet.height - pApplet.mouseY).toDouble() + board.cannon.position.y
+        angle = Math.atan(x / y).toFloat() - cannonAngle.toFloat()
     }
 
     fun display() {
@@ -50,11 +51,13 @@ class Cannon(
         }
     }
 
+
+
     fun shot(time: Long) {
         counterShot++
-        val velocity = 10f + time / 10f
+        val velocity = 10f + time *100f
         val bulletVelocity = Vec2(velocity * PApplet.sin(angle), velocity * PApplet.cos(angle))
-        val bulletAngle = angle.toDouble() + Math.toRadians(-10.0)
+        val bulletAngle = angle.toDouble() + cannonAngle
 
         val xAngleTranslate = 250f * Math.sin(bulletAngle).toFloat()
         val yAngleTranslate = 250f * Math.cos(bulletAngle).toFloat()

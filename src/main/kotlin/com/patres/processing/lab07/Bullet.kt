@@ -24,7 +24,7 @@ class Bullet(
     private var previousPositions = ArrayList<Vec2>()
 
     init {
-        makeBody(position.x, position.y, image.height /2f)
+        makeBody(position.x, position.y, image.height / 2f)
     }
 
     fun killBody() {
@@ -39,8 +39,6 @@ class Bullet(
         }
         return false
     }
-
-
 
     fun display() {
         val pos = box2d.getBodyPixelCoord(body)
@@ -72,7 +70,7 @@ class Bullet(
         }
         val fd = FixtureDef().apply {
             shape = cs
-            density = 1f
+            density = 10f
             friction = 0.01f
             restitution = 0.3f
         }

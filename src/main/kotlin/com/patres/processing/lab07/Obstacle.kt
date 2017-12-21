@@ -59,7 +59,7 @@ class Obstacle(
 
         val fd = FixtureDef().apply {
             shape = polygonShape
-            density = 0.1f
+            density = 1f
             friction = 0.3f
             restitution = 0.5f
         }

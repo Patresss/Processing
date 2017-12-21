@@ -5,7 +5,6 @@ import com.patres.processing.lab07.Obstacle
 import processing.core.PVector
 import java.awt.Color
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class RandomGenerator {
