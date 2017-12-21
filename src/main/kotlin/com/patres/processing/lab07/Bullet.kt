@@ -21,7 +21,7 @@ class Bullet(
     val pApplet: PApplet = cannon.pApplet
     val image = cannon.board.imageKeeper.snowBall
     private val numverOfPreviusImage = 30
-    var previousPositions = ArrayList<Vec2>()
+    private var previousPositions = ArrayList<Vec2>()
 
     init {
         makeBody(position.x, position.y, image.height /2f)
@@ -55,7 +55,6 @@ class Bullet(
                 rotate(-a)
                 tint(255f, 255f / ++counter)
                 image(image, -image.width / 2f, -image.height / 2f)
-
                 popMatrix()
             }
         }
@@ -83,6 +82,7 @@ class Bullet(
             linearVelocity = velocity
             angularVelocity = 10f
         }
+        body.userData = this
     }
 
 }

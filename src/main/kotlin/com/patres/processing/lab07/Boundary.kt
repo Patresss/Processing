@@ -9,13 +9,13 @@ class Boundary(
         val board: Board
 ) {
 
-    var b: Body
-    val box2d = board.box2d
+    var body: Body
     val pApplet = board.pApplet
     val x = -pApplet.width.toFloat() / 2
     val y =  pApplet.height.toFloat() - 100f
-    val w = pApplet.width.toFloat() * 2f
-    val h = 10f
+    private val w = pApplet.width.toFloat() * 2f
+    private val h = 10f
+    private val box2d = board.box2d
 
     init {
         val sd = PolygonShape()
@@ -28,21 +28,10 @@ class Boundary(
             position.set(box2d.coordPixelsToWorld(x, y))
         }
 
-        b = box2d.createBody(bd).apply {
+        body = box2d.createBody(bd).apply {
             createFixture(sd, 1f)
         }
-    }
-
-    fun display() {
-        pApplet.run {
-            fill(0)
-            stroke(0)
-            strokeWeight(1f)
-            pushMatrix()
-            translate(x, y)
-            rect(0f, 0f, w, h)
-            popMatrix()
-        }
+        body.userData = this
     }
 
 }

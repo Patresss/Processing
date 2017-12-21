@@ -16,7 +16,7 @@ class RandomGenerator {
         fun generateVector(min: Float = 0f, max: Float): PVector = PVector(generateFloat(min, max), generateFloat(min, max))
         fun generateObstacleXPosition(board: Board, numberOfObstacle: Int): List<Float> {
             val min = board.cannon.image.width + 100f
-            val max = board.pApplet.width.toFloat()
+            val max = board.pApplet.width.toFloat() - board.cannon.image.width
             val obstacleX = arrayListOf(generateFloat(min = min, max = max))
             while(obstacleX.size < numberOfObstacle) {
                 val generateNumber = generateFloat(min = min, max = max)

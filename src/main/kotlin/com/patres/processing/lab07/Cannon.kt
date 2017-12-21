@@ -13,9 +13,10 @@ class Cannon(
     val image = board.imageKeeper.cannonImage
     val angleSpeed: Float = 0.03f
     val imageAngle = -Math.PI.toFloat() / 2f
-    val particles = ArrayList<Bullet>()
+    var bullets = ArrayList<Bullet>()
     val position: PVector = PVector(-image.width / 2f, -image.height / 2f)
     val translatePosition: PVector = PVector(image.width / 2f, pApplet.height.toFloat() - image.height)
+    var counterShot = 0
     var angle: Float = Math.PI.toFloat() / 4f
         set(value) {
             field = when {
@@ -37,8 +38,8 @@ class Cannon(
     }
 
     fun display() {
-        particles.forEach { it.display() }
-        particles.removeIf { it.done() }
+        bullets.forEach { it.display() }
+        bullets.removeIf { it.done() }
         pApplet.run {
             pushMatrix()
             translate(translatePosition.x, translatePosition.y)
@@ -50,6 +51,7 @@ class Cannon(
     }
 
     fun shot(time: Long) {
+        counterShot++
         val velocity = 10f + time / 10f
         val bulletVelocity = Vec2(velocity * PApplet.sin(angle), velocity * PApplet.cos(angle))
         val bulletAngle = angle.toDouble() + Math.toRadians(-10.0)
@@ -57,10 +59,15 @@ class Cannon(
         val xAngleTranslate = 250f * Math.sin(bulletAngle).toFloat()
         val yAngleTranslate = 250f * Math.cos(bulletAngle).toFloat()
         val bulletPosition = PVector(translatePosition.x + xAngleTranslate, translatePosition.y - yAngleTranslate)
-        particles.add(Bullet(cannon = this, box2d = board.box2d, velocity = bulletVelocity, position = bulletPosition))
+        bullets.add(Bullet(cannon = this, box2d = board.box2d, velocity = bulletVelocity, position = bulletPosition))
     }
 
     fun changeAngle(clockwiseMovement: Boolean) {
         angle += if (clockwiseMovement) angleSpeed else -angleSpeed
+    }
+
+    fun removeBullets() {
+        bullets.forEach { it.killBody() }
+        bullets = ArrayList()
     }
 }

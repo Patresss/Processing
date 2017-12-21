@@ -1,6 +1,7 @@
 package com.patres.processing.lab07
 
 import org.jbox2d.collision.shapes.PolygonShape
+import org.jbox2d.common.Vec2
 import org.jbox2d.dynamics.Body
 import org.jbox2d.dynamics.BodyDef
 import org.jbox2d.dynamics.BodyType
@@ -12,7 +13,15 @@ class Obstacle(
         val x: Float,
         val y: Float = 680f
 ) {
+
+    companion object {
+        val ANGLE_DOWN = Math.toRadians(60.0).toFloat()
+        val DOWN_MOVE_EPSILON = 0.1f
+    }
+
     val pApplet = board.pApplet
+    var position = Vec2()
+    var previousPosition: Vec2? = null
     val box2d = board.box2d
     val image = board.imageKeeper.ice
     lateinit var body: Body
@@ -22,11 +31,13 @@ class Obstacle(
     }
 
     fun display() {
-        val pos = box2d.getBodyPixelCoord(body)
+        previousPosition = Vec2(position)
+        position = box2d.getBodyPixelCoord(body)
+
         val a = body.angle
         pApplet.run {
             pushMatrix()
-            translate(pos.x, pos.y)
+            translate(position.x, position.y)
             rotate(-a)
             image(image, -image.width / 2f, -image.height / 2f)
             popMatrix()
@@ -56,5 +67,19 @@ class Obstacle(
         body = box2d.world.createBody(bd).apply {
             createFixture(fd)
         }
+        body.userData = this
+    }
+
+    fun isDown() : Boolean {
+        previousPosition?.let { previousPosition ->
+            return Math.abs(body.angle) > ANGLE_DOWN &&
+                    Math.abs(previousPosition.x - position.x) <= DOWN_MOVE_EPSILON &&
+                    Math.abs(previousPosition.y - position.y) <= DOWN_MOVE_EPSILON
+        }
+        return false
+    }
+
+    fun killBody() {
+        box2d.destroyBody(body)
     }
 }
