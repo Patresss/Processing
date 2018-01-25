@@ -25,3 +25,22 @@ fun PImage.flipVerticalImage(): PImage {
     }
     return verticalImage
 }
+
+
+fun PApplet.flipVerticalImage(): PImage {
+    val verticalImage = PImage(this.width, this.height)
+    for (w in 0..this.width) {
+        for (h in 0..this.height) {
+            val orgColor = this.get(w, h)
+            verticalImage.set(this.width - w, h, orgColor)
+        }
+    }
+    return verticalImage
+}
+
+
+fun PApplet.keepMatrix(operations: PApplet.() -> Unit) {
+    pushMatrix()
+    operations()
+    popMatrix()
+}

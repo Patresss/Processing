@@ -12,7 +12,7 @@ class SketchLab07 : PApplet() {
     companion object {
         val SIZE_X = 1920
         val SIZE_Y = 1080
-        val DEBUG_MODE = true
+        val DEBUG_MODE = false
     }
 
     lateinit var board: Board

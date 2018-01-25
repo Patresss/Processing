@@ -14,7 +14,8 @@ class Board(
 ) {
 
     companion object {
-        val FINAL_LEVEL = 1
+        val FINAL_LEVEL = 2
+
     }
 
     val imageKeeper = ImageKeeper(pApplet)

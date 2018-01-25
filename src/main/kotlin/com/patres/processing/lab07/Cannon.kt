@@ -52,10 +52,9 @@ class Cannon(
     }
 
 
-
     fun shot(time: Long) {
         counterShot++
-        val velocity = 10f + time *100f
+        val velocity = 10f + time / 10f
         val bulletVelocity = Vec2(velocity * PApplet.sin(angle), velocity * PApplet.cos(angle))
         val bulletAngle = angle.toDouble() + cannonAngle
 

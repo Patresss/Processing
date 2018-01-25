@@ -1,7 +1,6 @@
 package com.patres.processing.utils
 
 import com.patres.processing.lab07.Board
-import com.patres.processing.lab07.Obstacle
 import processing.core.PVector
 import java.awt.Color
 import java.util.*
